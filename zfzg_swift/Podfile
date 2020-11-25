@@ -1,0 +1,53 @@
+
+platform :ios, '10.0'
+
+target 'zfzg_swift' do
+# Comment the next line if you're not using Swift and don't want to use dynamic frameworks
+  use_frameworks!
+  pod 'SwiftyJSON','4.1.0' #JSON数据转换
+  pod 'Alamofire','4.9.0' #网络请求
+  pod 'RxAlamofire','4.4.1' #This would be the last version to support Swift 4.2
+  pod 'RxSwift', '4.5.0'
+  pod 'RxCocoa', '4.5.0'
+
+  pod 'JPush','3.2.2' #极光推送
+  pod 'RealmSwift', '3.21.0' #数据库,pod install时去掉use_frameworks!
+  
+  pod 'SnapKit','4.0.0' #UI布局
+  pod 'IQKeyboardManagerSwift','6.0.3' #键盘管理
+  
+  pod 'MBProgressHUD' #弹出提示UI
+  
+  pod 'SDWebImage' #图片下载与缓存
+
+  pod 'DZNEmptyDataSet'
+  
+  pod 'MJRefresh'
+  
+  pod 'Device' #设备型号
+  
+  pod 'CustomIOSAlertView' #弹出框
+
+  
+  pod 'FLAnimatedImage' #加载显示gif图
+  
+  pod 'QMUIKit' 
+  pod 'JXPagingView' #分类切换滚动视图
+  pod 'JXSegmentedView'
+  pod 'JXPageControl'
+
+  post_install do |installer|
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        config.build_settings['ENABLE_BITCODE'] = 'NO'
+        config.build_settings['SWIFT_VERSION'] = '4.0'
+        #该方法会移除 所有pod 对stdc++.6.0.9库的依赖，建议仅在Xcode10上使用
+        xcconfig_path = config.base_configuration_reference.real_path
+        xcconfig = File.read(xcconfig_path)
+        new_xcconfig = xcconfig.sub('stdc++.6.0.9', 'c++')
+        File.open(xcconfig_path, "w") { |file| file << new_xcconfig }
+      end
+    end
+  end
+  
+end
